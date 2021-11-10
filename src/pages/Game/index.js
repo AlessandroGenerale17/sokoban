@@ -56,87 +56,18 @@ const initialGrid = [
 const initalPlayerPos = { x: 3, y: 1 };
 
 export default function Game() {
-	const N = 3;
-	// sprites [wall, player, ball]
-
 	const [gridState, setGridState] = useState(initialGrid);
 	const [playerPos, setPlayerPos] = useState(initalPlayerPos);
 
-	// // from
-	const moveLeft = (playerPos) => {
-		// to playerPos => x - 1
+	const move = (playerPos, move) => {
 		const from = { x: playerPos.x, y: playerPos.y };
-		const to = { x: playerPos.x, y: playerPos.y - 1 };
-
+		const to = { x: playerPos.x + move.x, y: playerPos.y + move.y };
 		const box = isBox(to);
 		const grid = [...gridState];
-
-		if (box && canMove({ x: to.x, y: to.y - 1 })) {
+		if (box && canMove({ x: to.x + move.x, y: to.y + move.y })) {
 			grid[from.x][from.y].cellType = cellType.empty;
 			grid[to.x][to.y].cellType = cellType.player;
-			grid[to.x][to.y - 1].cellType = cellType.box;
-
-			setPlayerPos(to);
-			setGridState(grid);
-		} else if (canMove(to)) {
-			grid[from.x][from.y].cellType = cellType.empty;
-			grid[to.x][to.y].cellType = cellType.player;
-			setPlayerPos(to);
-			setGridState(grid);
-		}
-	};
-
-	const moveRight = (playerPos) => {
-		const from = { x: playerPos.x, y: playerPos.y };
-		const to = { x: playerPos.x, y: playerPos.y + 1 };
-		const box = isBox(to);
-		const grid = [...gridState];
-		if (box && canMove({ x: to.x, y: to.y + 1 })) {
-			grid[from.x][from.y].cellType = cellType.empty;
-			grid[to.x][to.y].cellType = cellType.player;
-			grid[to.x][to.y + 1].cellType = cellType.box;
-
-			setPlayerPos(to);
-			setGridState(grid);
-		} else if (canMove(to)) {
-			grid[from.x][from.y].cellType = cellType.empty;
-			grid[to.x][to.y].cellType = cellType.player;
-			setPlayerPos(to);
-			setGridState(grid);
-		}
-	};
-
-	const moveUp = (playerPos) => {
-		const from = { x: playerPos.x, y: playerPos.y };
-		const to = { x: playerPos.x - 1, y: playerPos.y };
-
-		const box = isBox(to);
-		const grid = [...gridState];
-
-		if (box && canMove({ x: to.x - 1, y: to.y })) {
-			grid[from.x][from.y].cellType = cellType.empty;
-			grid[to.x][to.y].cellType = cellType.player;
-			grid[to.x - 1][to.y].cellType = cellType.box;
-
-			setPlayerPos(to);
-			setGridState(grid);
-		} else if (canMove(to)) {
-			grid[from.x][from.y].cellType = cellType.empty;
-			grid[to.x][to.y].cellType = cellType.player;
-			setPlayerPos(to);
-			setGridState(grid);
-		}
-	};
-
-	const moveDown = (playerPos) => {
-		const from = { x: playerPos.x, y: playerPos.y };
-		const to = { x: playerPos.x + 1, y: playerPos.y };
-		const box = isBox(to);
-		const grid = [...gridState];
-		if (box && canMove({ x: to.x + 1, y: to.y })) {
-			grid[from.x][from.y].cellType = cellType.empty;
-			grid[to.x][to.y].cellType = cellType.player;
-			grid[to.x + 1][to.y].cellType = cellType.box;
+			grid[to.x + move.x][to.y + move.y].cellType = cellType.box;
 
 			setPlayerPos(to);
 			setGridState(grid);
@@ -168,29 +99,19 @@ export default function Game() {
 					cell.y === to.y
 			).length;
 
-	// TODO maybe use this
-	// const move = (direction, playerPos) => {
-	// 	switch (direction) {
-	// 		case 'LEFT':
-	// 		case 'RIGHT':
-	// 		case 'UP':
-	// 		case 'DOWN':
-	// 	}
-	// };
-
 	const handleKeyPressed = (e) => {
 		switch (e.key) {
 			case 'ArrowLeft':
-				moveLeft(playerPos, 'LEFT');
+				move(playerPos, { x: 0, y: -1 });
 				break;
 			case 'ArrowRight':
-				moveRight(playerPos, 'RIGHT');
+				move(playerPos, { x: 0, y: 1 });
 				break;
 			case 'ArrowUp':
-				moveUp(playerPos, 'UP');
+				move(playerPos, { x: -1, y: 0 });
 				break;
 			case 'ArrowDown':
-				moveDown(playerPos, 'DOWN');
+				move(playerPos, { x: 1, y: 0 });
 				break;
 			default:
 				return;
@@ -212,7 +133,6 @@ export default function Game() {
 					))}
 				</div>
 			))}
-			<button onClick={() => moveLeft(playerPos)}>MoveLeft</button>
 		</div>
 	);
 }
