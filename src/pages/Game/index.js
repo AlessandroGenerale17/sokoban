@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 const grid = [
 	[
 		{ x: 0, y: 1, val: false },
@@ -44,28 +44,23 @@ export default function Game() {
 		setGridState(gridy);
 	};
 
-	// console.log(grid[2]);
-	// console.log(grid[2][2]);
-	// n * m
-	/*
-        [
-         0 [
-              [0, 0], [0, 1], [0, 2]
-          ]
-         1 [
-              [1, 0], [1, 1], [1, 2]
-          ]
-        2 [
-            [2, 0], [2, 1], [2, 2]
-          ]
-        ]
-    */
-	/* Current player 0, 0*/
+	const moveRight = (playerPos) => {
+		const from = { x: playerPos.x, y: playerPos.y };
+		const to = { x: playerPos.x, y: playerPos.y + 1 };
+		const gridy = [...gridState];
+		gridy[from.x][from.y].val = false;
+		gridy[to.x][to.y].val = true;
+		setPlayerPos(to);
+		setGridState(gridy);
+	};
 
-	/* EVENT LISTENER for key right */
-	/* moveRight()*/
+	const handleKeyPressed = (e) => {
+		if (e.key === 'ArrowLeft') moveLeft(playerPos);
+		else if (e.key === 'ArrowRight') moveRight(playerPos);
+	};
+
 	return (
-		<div className='grid'>
+		<div className='grid' tabIndex={0} onKeyDown={handleKeyPressed}>
 			{/* ROW 0 */}
 			{/* ROW 1 */}
 			{/* ROW 2 */}
@@ -76,14 +71,18 @@ export default function Game() {
 						<div
 							key={j}
 							style={{
+								width: '10vw',
+								height: '10vw',
 								border: '1px solid black',
-								width: '20vw',
-								height: '20vw',
-								backgroundColor: `${
-									cell.val ? 'red' : 'white'
-								}`,
+								backgroundColor: cell.val ? 'red' : 'white',
 							}}
-						></div>
+						>
+							{/* <img
+								// src='https://cdnb.artstation.com/p/assets/images/images/035/877/165/large/gregory-ligman-brick-wall-tile.jpg?1616129544'
+								//style={{ height: '100%' }}
+								//alt=''
+							/> */}
+						</div>
 					))}
 				</div>
 			))}
