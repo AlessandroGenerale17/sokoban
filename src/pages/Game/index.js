@@ -54,9 +54,27 @@ export default function Game() {
 		setGridState(gridy);
 	};
 
+	// TODO maybe use this
+	// const move = (direction, playerPos) => {
+	// 	switch (direction) {
+	// 		case 'LEFT':
+	// 		case 'RIGHT':
+	// 		case 'UP':
+	// 		case 'DOWN':
+	// 	}
+	// };
+
 	const handleKeyPressed = (e) => {
-		if (e.key === 'ArrowLeft') moveLeft(playerPos);
-		else if (e.key === 'ArrowRight') moveRight(playerPos);
+		switch (e.key) {
+			case 'ArrowLeft':
+				moveLeft(playerPos, 'LEFT');
+				break;
+			case 'ArrowRight':
+				moveRight(playerPos, 'RIGHT');
+				break;
+			default:
+				return;
+		}
 	};
 
 	return (
