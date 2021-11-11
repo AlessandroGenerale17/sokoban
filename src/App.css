@@ -1,0 +1,8 @@
+@font-face {
+  font-family: "Silk screen";
+  src: url("./assets/fonts/slkscr-webfont.woff") format("woff");
+}
+
+* {
+  font-family: "Silk screen", sans-serif;
+}

@@ -1,16 +1,23 @@
 .menuBox {
   display: flex;
   flex-direction: column;
-  background-color: rgb(104, 156, 122);
   color: white;
   width: 20vw;
   box-shadow: 1 5 4;
   margin: 5vw auto;
   padding: 10px 50px 30px 50px;
+  cursor: url(../../assets/cursor/pixel-cursor.png), auto;
+  border: 30px solid transparent;
 }
 
 .menuBox > h1 {
   text-align: center;
+}
+
+.menuBox > select {
+  border: none;
+  background-color: white;
+  font-size: larger;
 }
 
 .themeSelector {
@@ -31,7 +38,7 @@
 }
 
 .themes > img {
-  height: 80px;
+  height: 50px;
 }
 
 .themes > button {
@@ -42,4 +49,8 @@
   text-decoration: none;
   margin: 10px;
   font-size: larger;
+}
+
+.themes > button:hover {
+  color: red;
 }
