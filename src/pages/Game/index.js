@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Cell from '../../components/cell';
-import playerSound from '../../assets/sounds/footstep_concrete_003.ogg';
+import walk from '../../assets/sounds/footstep_concrete_003.ogg';
+import push from '../../assets/sounds/push.mp3';
+import nope from '../../assets/sounds/nope.mp3';
 
 const cellType = {
 	wall: 'wall',
@@ -67,7 +69,15 @@ export default function Game() {
 	const [gridState, setGridState] = useState(initialGrid);
 	const [playerPos, setPlayerPos] = useState(initalPlayerPos);
 	const [gameOver, setGameOver] = useState(false);
-	const [audioPlaying, setAudioPlaying] = useState(null);
+	const [audioPlaying, setAudioPlaying] = useState({});
+
+	useEffect(() => {
+		setAudioPlaying({
+			push: new Audio(push),
+			walk: new Audio(walk),
+			nope: new Audio(nope),
+		});
+	}, []);
 
 	const move = (playerPos, move) => {
 		const from = { x: playerPos.x, y: playerPos.y };
@@ -81,27 +91,26 @@ export default function Game() {
 
 			setPlayerPos({ ...to, active: !playerPos.active });
 			setGridState(grid);
+			playSound('push');
 		} else if (canMove(to)) {
 			grid[from.x][from.y].cellType = cellType.empty;
 			grid[to.x][to.y].cellType = cellType.player;
 			setPlayerPos({ ...to, active: !playerPos.active });
 			setGridState(grid);
-			playSound();
+			playSound('walk');
+		} else {
+			playSound('nope');
 		}
 
 		setGameOver(isGameOver());
 	};
 
-	const playSound = () => {
-		if (audioPlaying) {
-			audioPlaying.pause();
-			audioPlaying.currentTime = 0;
-			audioPlaying.play();
-		} else {
-			const audio = new Audio(playerSound);
-			setAudioPlaying(audio);
-			audio.play();
+	const playSound = (key) => {
+		if (audioPlaying[key]) {
+			audioPlaying[key].pause();
+			audioPlaying[key].currentTime = 0;
 		}
+		audioPlaying[key].play();
 	};
 
 	const canMove = (to) =>
