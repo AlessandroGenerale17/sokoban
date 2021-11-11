@@ -33,8 +33,10 @@ export default function Menu() {
     },
   ];
 
-  const [themeIndex, setThemeIndex] = useState(0);
-  const [selectedTheme, setSelectedTheme] = useState(themes[themeIndex]);
+
+	const [themeIndex, setThemeIndex] = useState(0);
+	const [selectedTheme, setSelectedTheme] = useState(themes[themeIndex]);
+
 
   const playSound = (key) => {
     if (audioPlaying[key]) {
@@ -76,32 +78,35 @@ export default function Menu() {
     >
       <h1>Sokoban</h1>
 
-      <h3>Select level:</h3>
-      <select
-        name="level"
-        id="level"
-        onChange={(event) => {
-          navigate(`/game/${event.target.value}`);
-        }}
-      >
-        <option>...</option>
-        <option value="1">level 1</option>
-        <option value="2">level 2</option>
-        <option value="3">level 3</option>
-      </select>
+			<h3>Select level:</h3>
+			<select
+				name='level'
+				id='level'
+				onChange={(event) => {
+					navigate(`/game/${event.target.value}`);
+				}}
+			>
+				<option>...</option>
+				<option value='1'>level 1</option>
+				<option value='2'>level 2</option>
+				<option value='3'>level 3</option>
+			</select>
 
-      <h3>Select theme:</h3>
+			<h3>Select theme:</h3>
 
-      <div className="themeSelector">
-        <p>{selectedTheme.title}</p>
-        <div className="themes">
-          <button onClick={() => handleClick(-1)}>&lt;</button>
-          <img src={selectedTheme.image} alt={selectedTheme.title}></img>
-          <button onClick={() => handleClick(1)}>&gt;</button>
-        </div>
-      </div>
+			<div className='themeSelector'>
+				<p>{selectedTheme.title}</p>
+				<div className='themes'>
+					<button onClick={() => handleClick(-1)}>&lt;</button>
+					<img
+						src={selectedTheme.image}
+						alt={selectedTheme.title}
+					></img>
+					<button onClick={() => handleClick(1)}>&gt;</button>
+				</div>
+			</div>
 
-      <h3>Top scores:</h3>
-    </div>
-  );
+			<h3>Top scores:</h3>
+		</div>
+	);
 }
