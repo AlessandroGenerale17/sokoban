@@ -1,0 +1,45 @@
+.menuBox {
+  display: flex;
+  flex-direction: column;
+  background-color: rgb(104, 156, 122);
+  color: white;
+  width: 20vw;
+  box-shadow: 1 5 4;
+  margin: 5vw auto;
+  padding: 10px 50px 30px 50px;
+}
+
+.menuBox > h1 {
+  text-align: center;
+}
+
+.themeSelector {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin: auto;
+}
+
+.themeSelector > p {
+  margin: 0 0 5px 0;
+}
+
+.themes {
+  display: flex;
+  align-items: center;
+}
+
+.themes > img {
+  height: 80px;
+}
+
+.themes > button {
+  background-color: rgba(255, 255, 255, 0);
+  border: none;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  margin: 10px;
+  font-size: larger;
+}
