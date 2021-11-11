@@ -1,33 +1,41 @@
 import React from 'react';
+import character from '../../assets/sprites/character_0004.png';
+import character2 from '../../assets/sprites/character_0005.png';
+import empty from '../../assets/sprites/mapTile_022.png';
+import wall from '../../assets/sprites/block_06.png';
+import box from '../../assets/sprites/crate_42.png';
 
 export default function Cell(props) {
-	const { cellType, target } = props;
+	const { cellType, target, active } = props;
 
 	const displayCellAs = (cellType, target) => {
 		switch (cellType) {
 			case 'wall':
-				return 'black';
+				return wall;
 			case 'player':
-				return 'red';
+				return active ? character : character2;
 			case 'empty':
-				return target ? 'pink' : 'white';
+				return target ? 'pink' : empty;
 			case 'box':
-				return 'brown';
+				return box;
 			default:
 				return;
 		}
 	};
 
-	const background = displayCellAs(cellType, target);
+	const spriteSrc = displayCellAs(cellType, target);
 
 	return (
 		<div
 			style={{
 				width: '10vw',
 				height: '10vw',
-				border: '1px solid black',
-				backgroundColor: background,
+				backgroundImage: `url(${empty})`,
+				backgroundSize: '100%',
 			}}
-		></div>
+		>
+			{/* reacts */}
+			<img src={spriteSrc} style={{ width: '100%' }} alt='' />
+		</div>
 	);
 }
