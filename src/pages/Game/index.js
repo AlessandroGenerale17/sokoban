@@ -1,0 +1,153 @@
+import React, { useState } from 'react';
+import Cell from '../../components/cell';
+
+const cellType = {
+	wall: 'wall',
+	empty: 'empty',
+	player: 'player',
+	box: 'box',
+	target: 'target',
+};
+const initialGrid = [
+	[
+		{ x: 0, y: 0, cellType: cellType.wall, target: false },
+		{ x: 0, y: 1, cellType: cellType.wall, target: false },
+		{ x: 0, y: 2, cellType: cellType.wall, target: false },
+		{ x: 0, y: 3, cellType: cellType.wall, target: false },
+		{ x: 0, y: 4, cellType: cellType.wall, target: false },
+		{ x: 0, y: 5, cellType: cellType.wall, target: false },
+	],
+	[
+		{ x: 1, y: 0, cellType: cellType.wall, target: false },
+		{ x: 1, y: 1, cellType: cellType.empty, target: true },
+		{ x: 1, y: 2, cellType: cellType.box, target: false },
+		{ x: 1, y: 3, cellType: cellType.empty, target: false },
+		{ x: 1, y: 4, cellType: cellType.empty, target: true },
+		{ x: 1, y: 5, cellType: cellType.wall, target: false },
+	],
+	[
+		{ x: 2, y: 0, cellType: cellType.wall, target: false },
+		{ x: 2, y: 1, cellType: cellType.empty, target: false },
+		{ x: 2, y: 2, cellType: cellType.box, target: false },
+		{ x: 2, y: 3, cellType: cellType.empty, target: false },
+		{ x: 2, y: 4, cellType: cellType.empty, target: false },
+		{ x: 2, y: 5, cellType: cellType.wall, target: false },
+	],
+	[
+		{ x: 3, y: 0, cellType: cellType.wall, target: false },
+		{ x: 3, y: 1, cellType: cellType.player, target: false },
+		{ x: 3, y: 2, cellType: cellType.empty, target: false },
+		{ x: 3, y: 3, cellType: cellType.empty, target: false },
+		{ x: 3, y: 4, cellType: cellType.empty, target: false },
+		{ x: 3, y: 5, cellType: cellType.wall, target: false },
+	],
+	[
+		{ x: 4, y: 0, cellType: cellType.wall, target: false },
+		{ x: 4, y: 1, cellType: cellType.empty, target: false },
+		{ x: 4, y: 2, cellType: cellType.empty, target: false },
+		{ x: 4, y: 3, cellType: cellType.empty, target: false },
+		{ x: 4, y: 4, cellType: cellType.empty, target: false },
+		{ x: 4, y: 5, cellType: cellType.wall, target: false },
+	],
+	[
+		{ x: 5, y: 0, cellType: cellType.wall, target: false },
+		{ x: 5, y: 1, cellType: cellType.wall, target: false },
+		{ x: 5, y: 2, cellType: cellType.wall, target: false },
+		{ x: 5, y: 3, cellType: cellType.wall, target: false },
+		{ x: 5, y: 4, cellType: cellType.wall, target: false },
+		{ x: 5, y: 5, cellType: cellType.wall, target: false },
+	],
+];
+
+const targets = 2;
+const initalPlayerPos = { x: 3, y: 1 };
+
+export default function Game() {
+	const [gridState, setGridState] = useState(initialGrid);
+	const [playerPos, setPlayerPos] = useState(initalPlayerPos);
+	const [gameOver, setGameOver] = useState(false);
+
+	const move = (playerPos, move) => {
+		const from = { x: playerPos.x, y: playerPos.y };
+		const to = { x: playerPos.x + move.x, y: playerPos.y + move.y };
+		const box = isBox(to);
+		const grid = [...gridState];
+		if (box && canMove({ x: to.x + move.x, y: to.y + move.y })) {
+			grid[from.x][from.y].cellType = cellType.empty;
+			grid[to.x][to.y].cellType = cellType.player;
+			grid[to.x + move.x][to.y + move.y].cellType = cellType.box;
+
+			setPlayerPos(to);
+			setGridState(grid);
+		} else if (canMove(to)) {
+			grid[from.x][from.y].cellType = cellType.empty;
+			grid[to.x][to.y].cellType = cellType.player;
+			setPlayerPos(to);
+			setGridState(grid);
+		}
+
+		setGameOver(isGameOver());
+	};
+
+	const canMove = (to) =>
+		!gridState
+			.flat()
+			.filter(
+				(cell) =>
+					(cell.cellType === 'wall' || cell.cellType === 'box') &&
+					cell.x === to.x &&
+					cell.y === to.y
+			).length;
+
+	const isBox = (to) =>
+		gridState
+			.flat()
+			.filter(
+				(cell) =>
+					cell.cellType === 'box' &&
+					cell.x === to.x &&
+					cell.y === to.y
+			).length;
+
+	const handleKeyPressed = (e) => {
+		switch (e.key) {
+			case 'ArrowLeft':
+				move(playerPos, { x: 0, y: -1 });
+				break;
+			case 'ArrowRight':
+				move(playerPos, { x: 0, y: 1 });
+				break;
+			case 'ArrowUp':
+				move(playerPos, { x: -1, y: 0 });
+				break;
+			case 'ArrowDown':
+				move(playerPos, { x: 1, y: 0 });
+				break;
+			default:
+				return;
+		}
+	};
+
+	const isGameOver = () =>
+		gridState
+			.flat()
+			.filter((cell) => cell.cellType === 'box' && cell.target).length ===
+		targets;
+
+	return (
+		<div className='grid' tabIndex={0} onKeyDown={handleKeyPressed}>
+			{gridState.map((row, i) => (
+				<div key={i} style={{ display: 'flex' }}>
+					{row.map((cell, j) => (
+						<Cell
+							key={j}
+							cellType={cell.cellType}
+							target={cell.target}
+						/>
+					))}
+				</div>
+			))}
+			{gameOver && <p>Game Over</p>}
+		</div>
+	);
+}
