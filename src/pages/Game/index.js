@@ -1,63 +1,71 @@
 import React, { useState } from 'react';
 import Cell from '../../components/cell';
 
-const cellType = { wall: 'wall', empty: 'empty', player: 'player', box: 'box' };
+const cellType = {
+	wall: 'wall',
+	empty: 'empty',
+	player: 'player',
+	box: 'box',
+	target: 'target',
+};
 const initialGrid = [
 	[
-		{ x: 0, y: 0, cellType: cellType.wall },
-		{ x: 0, y: 1, cellType: cellType.wall },
-		{ x: 0, y: 2, cellType: cellType.wall },
-		{ x: 0, y: 3, cellType: cellType.wall },
-		{ x: 0, y: 4, cellType: cellType.wall },
-		{ x: 0, y: 5, cellType: cellType.wall },
+		{ x: 0, y: 0, cellType: cellType.wall, target: false },
+		{ x: 0, y: 1, cellType: cellType.wall, target: false },
+		{ x: 0, y: 2, cellType: cellType.wall, target: false },
+		{ x: 0, y: 3, cellType: cellType.wall, target: false },
+		{ x: 0, y: 4, cellType: cellType.wall, target: false },
+		{ x: 0, y: 5, cellType: cellType.wall, target: false },
 	],
 	[
-		{ x: 1, y: 0, cellType: cellType.wall },
-		{ x: 1, y: 1, cellType: cellType.empty },
-		{ x: 1, y: 2, cellType: cellType.box },
-		{ x: 1, y: 3, cellType: cellType.empty },
-		{ x: 1, y: 4, cellType: cellType.empty },
-		{ x: 1, y: 5, cellType: cellType.wall },
+		{ x: 1, y: 0, cellType: cellType.wall, target: false },
+		{ x: 1, y: 1, cellType: cellType.empty, target: true },
+		{ x: 1, y: 2, cellType: cellType.box, target: false },
+		{ x: 1, y: 3, cellType: cellType.empty, target: false },
+		{ x: 1, y: 4, cellType: cellType.empty, target: true },
+		{ x: 1, y: 5, cellType: cellType.wall, target: false },
 	],
 	[
-		{ x: 2, y: 0, cellType: cellType.wall },
-		{ x: 2, y: 1, cellType: cellType.empty },
-		{ x: 2, y: 2, cellType: cellType.box },
-		{ x: 2, y: 3, cellType: cellType.empty },
-		{ x: 2, y: 4, cellType: cellType.empty },
-		{ x: 2, y: 5, cellType: cellType.wall },
+		{ x: 2, y: 0, cellType: cellType.wall, target: false },
+		{ x: 2, y: 1, cellType: cellType.empty, target: false },
+		{ x: 2, y: 2, cellType: cellType.box, target: false },
+		{ x: 2, y: 3, cellType: cellType.empty, target: false },
+		{ x: 2, y: 4, cellType: cellType.empty, target: false },
+		{ x: 2, y: 5, cellType: cellType.wall, target: false },
 	],
 	[
-		{ x: 3, y: 0, cellType: cellType.wall },
-		{ x: 3, y: 1, cellType: cellType.player },
-		{ x: 3, y: 2, cellType: cellType.empty },
-		{ x: 3, y: 3, cellType: cellType.empty },
-		{ x: 3, y: 4, cellType: cellType.empty },
-		{ x: 3, y: 5, cellType: cellType.wall },
+		{ x: 3, y: 0, cellType: cellType.wall, target: false },
+		{ x: 3, y: 1, cellType: cellType.player, target: false },
+		{ x: 3, y: 2, cellType: cellType.empty, target: false },
+		{ x: 3, y: 3, cellType: cellType.empty, target: false },
+		{ x: 3, y: 4, cellType: cellType.empty, target: false },
+		{ x: 3, y: 5, cellType: cellType.wall, target: false },
 	],
 	[
-		{ x: 4, y: 0, cellType: cellType.wall },
-		{ x: 4, y: 1, cellType: cellType.empty },
-		{ x: 4, y: 2, cellType: cellType.empty },
-		{ x: 4, y: 3, cellType: cellType.empty },
-		{ x: 4, y: 4, cellType: cellType.empty },
-		{ x: 4, y: 5, cellType: cellType.wall },
+		{ x: 4, y: 0, cellType: cellType.wall, target: false },
+		{ x: 4, y: 1, cellType: cellType.empty, target: false },
+		{ x: 4, y: 2, cellType: cellType.empty, target: false },
+		{ x: 4, y: 3, cellType: cellType.empty, target: false },
+		{ x: 4, y: 4, cellType: cellType.empty, target: false },
+		{ x: 4, y: 5, cellType: cellType.wall, target: false },
 	],
 	[
-		{ x: 5, y: 0, cellType: cellType.wall },
-		{ x: 5, y: 1, cellType: cellType.wall },
-		{ x: 5, y: 2, cellType: cellType.wall },
-		{ x: 5, y: 3, cellType: cellType.wall },
-		{ x: 5, y: 4, cellType: cellType.wall },
-		{ x: 5, y: 5, cellType: cellType.wall },
+		{ x: 5, y: 0, cellType: cellType.wall, target: false },
+		{ x: 5, y: 1, cellType: cellType.wall, target: false },
+		{ x: 5, y: 2, cellType: cellType.wall, target: false },
+		{ x: 5, y: 3, cellType: cellType.wall, target: false },
+		{ x: 5, y: 4, cellType: cellType.wall, target: false },
+		{ x: 5, y: 5, cellType: cellType.wall, target: false },
 	],
 ];
 
+const targets = 2;
 const initalPlayerPos = { x: 3, y: 1 };
 
 export default function Game() {
 	const [gridState, setGridState] = useState(initialGrid);
 	const [playerPos, setPlayerPos] = useState(initalPlayerPos);
+	const [gameOver, setGameOver] = useState(false);
 
 	const move = (playerPos, move) => {
 		const from = { x: playerPos.x, y: playerPos.y };
@@ -77,6 +85,8 @@ export default function Game() {
 			setPlayerPos(to);
 			setGridState(grid);
 		}
+
+		setGameOver(isGameOver());
 	};
 
 	const canMove = (to) =>
@@ -118,21 +128,26 @@ export default function Game() {
 		}
 	};
 
-	console.log(gridState);
+	const isGameOver = () =>
+		gridState
+			.flat()
+			.filter((cell) => cell.cellType === 'box' && cell.target).length ===
+		targets;
 
 	return (
 		<div className='grid' tabIndex={0} onKeyDown={handleKeyPressed}>
-			{/* ROW 0 */}
-			{/* ROW 1 */}
-			{/* ROW 2 */}
-			{/* grid.map((row) => ) */}
 			{gridState.map((row, i) => (
 				<div key={i} style={{ display: 'flex' }}>
 					{row.map((cell, j) => (
-						<Cell key={j} cellType={cell.cellType} />
+						<Cell
+							key={j}
+							cellType={cell.cellType}
+							target={cell.target}
+						/>
 					))}
 				</div>
 			))}
+			{gameOver && <p>Game Over</p>}
 		</div>
 	);
 }

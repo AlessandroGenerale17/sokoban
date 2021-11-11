@@ -1,10 +1,15 @@
+import { Routes, Route } from 'react-router-dom';
 import Game from './pages/Game/';
+import Menu from './pages/Menu/';
 import './App.css';
 
 function App() {
 	return (
 		<div className='App'>
-			<Game />
+			<Routes>
+				<Route path='/game' element={<Game />} />
+				<Route path='/' element={<Menu />} />
+			</Routes>
 		</div>
 	);
 }
