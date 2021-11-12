@@ -4,6 +4,8 @@ import character2 from '../../assets/sprites/character_0005.png';
 import empty from '../../assets/sprites/mapTile_022.png';
 import wall from '../../assets/sprites/block_06.png';
 import box from '../../assets/sprites/crate_42.png';
+import placeholder from '../../assets/sprites/ground_06.png';
+import boxPlaced from '../../assets/sprites/crate_07.png';
 
 export default function Cell(props) {
 	const { cellType, target, active } = props;
@@ -15,9 +17,9 @@ export default function Cell(props) {
 			case 'player':
 				return active ? character : character2;
 			case 'empty':
-				return target ? 'pink' : empty;
+				return target ? placeholder : empty;
 			case 'box':
-				return box;
+				return target ? boxPlaced : box;
 			default:
 				return;
 		}
