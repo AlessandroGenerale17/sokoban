@@ -1,82 +1,79 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import clickSound from "../../assets/sounds/switch33.ogg";
-import "./menu.css";
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import clickSound from '../../assets/sounds/switch33.ogg';
+import './menu.css';
 
 export default function Menu() {
-  const navigate = useNavigate();
-  const [audioPlaying, setAudioPlaying] = useState({});
+	const navigate = useNavigate();
+	const [audioPlaying, setAudioPlaying] = useState({});
 
-  const themes = [
-    {
-      id: 1,
-      title: "dung-beetle",
-      image:
-        "https://thumbs.dreamstime.com/b/vector-pixel-art-beetle-isolated-vector-pixel-art-beetle-102308827.jpg",
-      tile: require("../../assets/sprites/mapTile_022.png").default,
-      block: require("../../assets/sprites/block_06.png").default,
-    },
-    {
-      id: 2,
-      title: "alien",
-      image: require("../../assets/sprites/character_0004.png").default,
-      tile: require("../../assets/sprites/mapTile_022.png").default,
-      block: require("../../assets/sprites/block-border.png").default,
-    },
-    {
-      id: 3,
-      title: "star trek",
-      image:
-        "http://piq.codeus.net/static/media/userpics/piq_323250_400x400.png",
-      tile: require("../../assets/sprites/mapTile_022.png").default,
-      block: require("../../assets/sprites/block_06.png").default,
-    },
-  ];
-
+	const themes = [
+		{
+			id: 1,
+			title: 'dung-beetle',
+			image: 'https://thumbs.dreamstime.com/b/vector-pixel-art-beetle-isolated-vector-pixel-art-beetle-102308827.jpg',
+			tile: require('../../assets/sprites/empty-grass-tile.png').default,
+			block: require('../../assets/sprites/brick-wall.png').default,
+		},
+		{
+			id: 2,
+			title: 'alien',
+			image: require('../../assets/sprites/character-legs-apart.png')
+				.default,
+			tile: require('../../assets/sprites/empty-grass-tile.png').default,
+			block: require('../../assets/sprites/block-border.png').default,
+		},
+		{
+			id: 3,
+			title: 'star trek',
+			image: 'http://piq.codeus.net/static/media/userpics/piq_323250_400x400.png',
+			tile: require('../../assets/sprites/empty-grass-tile.png').default,
+			block: require('../../assets/sprites/brick-wall.png').default,
+		},
+	];
 
 	const [themeIndex, setThemeIndex] = useState(0);
 	const [selectedTheme, setSelectedTheme] = useState(themes[themeIndex]);
 
+	const playSound = (key) => {
+		if (audioPlaying[key]) {
+			audioPlaying[key].pause();
+			audioPlaying[key].currentTime = 0;
+		}
+		audioPlaying[key].play();
+	};
 
-  const playSound = (key) => {
-    if (audioPlaying[key]) {
-      audioPlaying[key].pause();
-      audioPlaying[key].currentTime = 0;
-    }
-    audioPlaying[key].play();
-  };
+	const handleClick = (i) => {
+		const index = themeIndex + i;
+		if (index === themes.length) {
+			setThemeIndex(0);
+			setSelectedTheme(themes[0]);
+		} else if (index < 0) {
+			setThemeIndex(themes.length - 1);
+			setSelectedTheme(themes[themes.length - 1]);
+		} else {
+			setThemeIndex(index);
+			setSelectedTheme(themes[index]);
+		}
 
-  const handleClick = (i) => {
-    const index = themeIndex + i;
-    if (index === themes.length) {
-      setThemeIndex(0);
-      setSelectedTheme(themes[0]);
-    } else if (index < 0) {
-      setThemeIndex(themes.length - 1);
-      setSelectedTheme(themes[themes.length - 1]);
-    } else {
-      setThemeIndex(index);
-      setSelectedTheme(themes[index]);
-    }
+		playSound('click');
+	};
 
-    playSound("click");
-  };
+	useEffect(() => {
+		setAudioPlaying({
+			click: new Audio(clickSound),
+		});
+	}, []);
 
-  useEffect(() => {
-    setAudioPlaying({
-      click: new Audio(clickSound),
-    });
-  }, []);
-
-  return (
-    <div
-      className="menuBox"
-      style={{
-        background: `url(${selectedTheme.tile})`,
-        borderImage: `url(${selectedTheme.block}) 100 round `,
-      }}
-    >
-      <h1>Sokoban</h1>
+	return (
+		<div
+			className='menuBox'
+			style={{
+				background: `url(${selectedTheme.tile})`,
+				borderImage: `url(${selectedTheme.block}) 100 round `,
+			}}
+		>
+			<h1>Sokoban</h1>
 
 			<h3>Select level:</h3>
 			<select
