@@ -1,14 +1,25 @@
 import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router';
 import Cell from '../../components/cell';
 import walk from '../../assets/sounds/footstep_concrete_003.ogg';
 import push from '../../assets/sounds/push.mp3';
 import nope from '../../assets/sounds/nope.mp3';
-import { level1, initialPlayerPos, targets } from '../../assets/levels/level1';
 import { cellType } from '../../assets/levels/cellTypes';
 
 import './index.css';
 
 export default function Game() {
+	const { level } = useParams();
+	
+	// automatically loads the correct level
+	const {
+		level1,
+		initialPlayerPos,
+		targets,
+	} = require(`../../assets/levels/level${level}`);
+
+	// TODO similarly the theme selected etc
+	// TODO perhaps reducer? (easier than props)
 	const [gridState, setGridState] = useState(level1);
 	const [playerPos, setPlayerPos] = useState(initialPlayerPos);
 	const [gameOver, setGameOver] = useState(false);

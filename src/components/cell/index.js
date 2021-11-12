@@ -30,14 +30,17 @@ export default function Cell(props) {
 	return (
 		<div
 			style={{
-				width: '2.5vw',
-				height: '2.5vw',
+				width: '100%',
 				backgroundImage: `url(${empty})`,
 				backgroundSize: '100%',
 			}}
 		>
 			{/* reacts */}
-			<img src={spriteSrc} style={{ width: '100%' }} alt='' />
+			<img
+				src={spriteSrc}
+				style={{ width: '100%', height: '100%' }}
+				alt=''
+			/>
 		</div>
 	);
 }
