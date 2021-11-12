@@ -7,7 +7,7 @@
   margin: 5vw auto;
   padding: 10px 50px 30px 50px;
   cursor: url(../../assets/cursor/pixel-cursor.png), auto;
-  border: 30px solid transparent;
+  /* border: 30px solid transparent; */
 }
 
 .menuBox > h1 {

@@ -1,9 +1,9 @@
 .game-wrapper {
-	display: flex;
-	justify-content: center;
-	color: white;
-	width: 40vw;
-	box-shadow: 1 5 4;
-	margin: 5vw auto;
-	padding: 10px 50px 30px 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 30vw;
+  height: 100vh;
+  box-shadow: 1 5 4;
+  margin: auto;
 }
