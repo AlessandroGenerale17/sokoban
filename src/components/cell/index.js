@@ -30,8 +30,8 @@ export default function Cell(props) {
 	return (
 		<div
 			style={{
-				width: '10vw',
-				height: '10vw',
+				width: '2.5vw',
+				height: '2.5vw',
 				backgroundImage: `url(${empty})`,
 				backgroundSize: '100%',
 			}}
