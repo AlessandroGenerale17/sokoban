@@ -1,11 +1,11 @@
 import React from 'react';
-import character from '../../assets/sprites/character_0004.png';
-import character2 from '../../assets/sprites/character_0005.png';
-import empty from '../../assets/sprites/mapTile_022.png';
-import wall from '../../assets/sprites/block_06.png';
-import box from '../../assets/sprites/crate_42.png';
-import placeholder from '../../assets/sprites/ground_06.png';
-import boxPlaced from '../../assets/sprites/crate_07.png';
+import character from '../../assets/sprites/character-legs-together.png';
+import character2 from '../../assets/sprites/character-legs-apart.png';
+import empty from '../../assets/sprites/empty-grass-tile.png';
+import wall from '../../assets/sprites/brick-wall.png';
+import box from '../../assets/sprites/box.png';
+import placeholder from '../../assets/sprites/placeholder-box.png';
+import boxPlaced from '../../assets/sprites/placed-box.png';
 
 export default function Cell(props) {
 	const { cellType, target, active } = props;
