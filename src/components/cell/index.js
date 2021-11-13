@@ -1,46 +1,35 @@
-import React from 'react';
-import character from '../../assets/sprites/character-legs-together.png';
-import character2 from '../../assets/sprites/character-legs-apart.png';
-import empty from '../../assets/sprites/empty-grass-tile.png';
-import wall from '../../assets/sprites/brick-wall.png';
-import box from '../../assets/sprites/box.png';
-import placeholder from '../../assets/sprites/placeholder-box.png';
-import boxPlaced from '../../assets/sprites/placed-box.png';
+import React from "react";
 
 export default function Cell(props) {
-	const { cellType, target, active } = props;
+  const { cellType, target, active, theme } = props;
 
-	const displayCellAs = (cellType, target) => {
-		switch (cellType) {
-			case 'wall':
-				return wall;
-			case 'player':
-				return active ? character : character2;
-			case 'empty':
-				return target ? placeholder : empty;
-			case 'box':
-				return target ? boxPlaced : box;
-			default:
-				return;
-		}
-	};
+  const displayCellAs = (cellType, target) => {
+    switch (cellType) {
+      case "wall":
+        return theme.wall;
+      case "player":
+        return active ? theme.character_1 : theme.character_2;
+      case "empty":
+        return target ? theme.placeholder : theme.floor;
+      case "box":
+        return target ? theme.placed_box : theme.box;
+      default:
+        return;
+    }
+  };
 
-	const spriteSrc = displayCellAs(cellType, target);
+  const spriteSrc = displayCellAs(cellType, target);
 
-	return (
-		<div
-			style={{
-				width: '100%',
-				backgroundImage: `url(${empty})`,
-				backgroundSize: '100%',
-			}}
-		>
-			{/* reacts */}
-			<img
-				src={spriteSrc}
-				style={{ width: '100%', height: '100%' }}
-				alt=''
-			/>
-		</div>
-	);
+  return (
+    <div
+      style={{
+        width: "100%",
+        backgroundImage: `url(${target ? theme.placeholder : theme.floor})`,
+        backgroundSize: "100%",
+      }}
+    >
+      {/* reacts */}
+      <img src={spriteSrc} style={{ width: "100%", height: "100%" }} alt="" />
+    </div>
+  );
 }
