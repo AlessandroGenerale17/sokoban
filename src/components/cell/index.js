@@ -9,8 +9,8 @@ export default function Cell(props) {
         return theme.wall;
       case "player":
         return active ? theme.character_1 : theme.character_2;
-      case "empty":
-        return target ? theme.placeholder : theme.floor;
+      // case "empty":
+      //   return target ? theme.placeholder : null;
       case "box":
         return target ? theme.placed_box : theme.box;
       default:
@@ -29,7 +29,9 @@ export default function Cell(props) {
       }}
     >
       {/* reacts */}
-      <img src={spriteSrc} style={{ width: "100%", height: "100%" }} alt="" />
+      {spriteSrc && (
+        <img src={spriteSrc} style={{ width: "100%", height: "100%" }} alt="" />
+      )}
     </div>
   );
 }

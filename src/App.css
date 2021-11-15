@@ -3,6 +3,10 @@
   src: url("./assets/fonts/slkscr-webfont.woff") format("woff");
 }
 
+html {
+  background-color: rgb(193, 215, 221);
+}
+
 * {
   font-family: "Silk screen", sans-serif;
 }
