@@ -1,50 +1,38 @@
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router';
+import React, { useState } from 'react';
+import { useParams, useNavigate } from 'react-router';
 import Cell from '../../components/cell';
-import walk from '../../assets/sounds/footstep_concrete_003.ogg';
-import push from '../../assets/sounds/push.mp3';
-import nope from '../../assets/sounds/nope.mp3';
 import { cellType } from '../../assets/levels/cellTypes';
-import { useSelector } from 'react-redux';
-import { selectTheme } from '../../store/theme/selectors';
+import { useSelector, useDispatch } from 'react-redux';
+import { selectTheme, selectAudio } from '../../store/theme/selectors';
+import { toggleAudio } from '../../store/theme/actions';
+import AudioOff from '../../assets/sprites/audioOffBlack.png';
+import AudioOn from '../../assets/sprites/audioOnBlack.png';
+import BackToMenu from '../../assets/sprites/backToMenu.png';
 import Overlay from '../../components/overlay';
 
 import './index.css';
 
 export default function Game() {
 	const { id } = useParams();
-	// automatically loads the correct level
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
 	const {
 		level,
 		initialPlayerPos,
 		targets,
 	} = require(`../../assets/levels/level${id}`);
 
-	// TODO similarly the theme selected etc
-	// TODO perhaps reducer? (easier than props)
 	const [gridState, setGridState] = useState(level);
 	const [playerPos, setPlayerPos] = useState(initialPlayerPos);
 	const [moves, setMoves] = useState(0);
 	const [gameOver, setGameOver] = useState(false);
-	const [audioPlaying, setAudioPlaying] = useState({});
 	const theme = useSelector(selectTheme());
-
-	useEffect(() => {
-		setGridState(level);
-		setPlayerPos(initialPlayerPos);
-		setAudioPlaying({
-			push: new Audio(push),
-			walk: new Audio(walk),
-			nope: new Audio(nope),
-		});
-	}, []);
+	const audio = useSelector(selectAudio());
 
 	const move = (playerPos, move) => {
 		const from = { x: playerPos.x, y: playerPos.y };
 		const to = { x: playerPos.x + move.x, y: playerPos.y + move.y };
 		const box = isBox(to);
-		// shallow copy
-		// const grid = [...gridState]
 		const grid = JSON.parse(JSON.stringify(gridState));
 		if (box && canMove({ x: to.x + move.x, y: to.y + move.y })) {
 			grid[from.x][from.y].cellType = cellType.empty;
@@ -54,27 +42,27 @@ export default function Game() {
 			setPlayerPos({ ...to, active: !playerPos.active });
 			setGridState(grid);
 			setMoves((prev) => prev + 1);
-			playSound('push');
+			if (audio.isOn) playSound('push');
 		} else if (canMove(to)) {
 			grid[from.x][from.y].cellType = cellType.empty;
 			grid[to.x][to.y].cellType = cellType.player;
 			setPlayerPos({ ...to, active: !playerPos.active });
 			setGridState(grid);
 			setMoves((prev) => prev + 1);
-			playSound('walk');
+			if (audio.isOn) playSound('walk');
 		} else {
-			playSound('nope');
+			if (audio.isOn) playSound('nope');
 		}
 
 		setGameOver(isGameOver(grid));
 	};
 
 	const playSound = (key) => {
-		if (audioPlaying[key]) {
-			audioPlaying[key].pause();
-			audioPlaying[key].currentTime = 0;
+		if (audio[key]) {
+			audio[key].pause();
+			audio[key].currentTime = 0;
 		}
-		audioPlaying[key].play();
+		audio[key].play();
 	};
 
 	const canMove = (to) =>
@@ -98,28 +86,30 @@ export default function Game() {
 			).length;
 
 	const handleKeyPressed = (e) => {
-		switch (e.key) {
-			case 'ArrowLeft':
-				move(playerPos, { x: 0, y: -1 });
-				break;
-			case 'ArrowRight':
-				move(playerPos, { x: 0, y: 1 });
-				break;
-			case 'ArrowUp':
-				move(playerPos, { x: -1, y: 0 });
-				break;
-			case 'ArrowDown':
-				move(playerPos, { x: 1, y: 0 });
-				break;
-			case ' ':
-				resetGame();
-				break;
-			default:
-				return;
-		}
+		if (!gameOver)
+			switch (e.key) {
+				case 'ArrowLeft':
+					move(playerPos, { x: 0, y: -1 });
+					break;
+				case 'ArrowRight':
+					move(playerPos, { x: 0, y: 1 });
+					break;
+				case 'ArrowUp':
+					move(playerPos, { x: -1, y: 0 });
+					break;
+				case 'ArrowDown':
+					move(playerPos, { x: 1, y: 0 });
+					break;
+				case ' ':
+					resetGame();
+					break;
+				default:
+					return;
+			}
 	};
 
 	const resetGame = () => {
+		if (audio.isOn) playSound('click');
 		setGridState(level);
 		setPlayerPos(initialPlayerPos);
 		setGameOver(false);
@@ -143,12 +133,37 @@ export default function Game() {
 				tabIndex={0}
 				onKeyDown={handleKeyPressed}
 			>
-				<div>
-					<h2 style={{ textAlign: 'center' }}>Level {id}</h2>
-					<p>Press the space bar to reset</p>
+				<div
+					style={{
+						display: 'flex',
+						justifyContent: 'space-between',
+					}}
+				>
+					<div>
+						<h2 style={{ textAlign: 'center' }}>Level {id}</h2>
+						<p>Press the space bar to reset</p>
+					</div>
+					<div style={{ alignSelf: 'center' }}>
+						<img
+							style={{ width: '4.0vw', marginLeft: '0.8rem' }}
+							src={BackToMenu}
+							alt=''
+							onClick={() => {
+								if (audio.isOn) playSound('click');
+								navigate('/');
+							}}
+						/>
+					</div>
 				</div>
 				<div className='grid'>
-					{gameOver && <Overlay level={id} resetGame={resetGame} />}
+					{gameOver && (
+						<Overlay
+							level={id}
+							resetGame={resetGame}
+							playSound={playSound}
+							audioOn={audio.isOn}
+						/>
+					)}
 					{gridState.map((row, i) => (
 						<div key={i} style={{ display: 'flex' }}>
 							{row.map((cell, j) => (
@@ -167,6 +182,19 @@ export default function Game() {
 					))}
 				</div>
 				<div className='game-stats'>
+					<img
+						style={{ width: '1.5vw' }}
+						src={audio.isOn ? AudioOn : AudioOff}
+						alt=''
+						onClick={() => {
+							dispatch(toggleAudio());
+							if (!audio.isOn) {
+								audio.themeSong.loop = true;
+								playSound('click');
+								playSound('themeSong');
+							} else audio['themeSong'].pause();
+						}}
+					/>
 					<span>Moves: {moves} </span>
 				</div>
 			</div>

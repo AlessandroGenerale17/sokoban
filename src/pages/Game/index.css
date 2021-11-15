@@ -2,6 +2,7 @@
 	height: 70vh;
 	width: 100vw;
 	display: flex;
+	cursor: url(../../assets/cursor/pixel-cursor.png), auto;
 }
 
 .game-wrapper {
@@ -25,5 +26,5 @@
 .game-stats {
 	width: 100%;
 	display: flex;
-	justify-content: flex-end;
+	justify-content: space-between;
 }
