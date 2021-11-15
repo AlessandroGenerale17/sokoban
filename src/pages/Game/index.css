@@ -1,9 +1,29 @@
+.container {
+	height: 70vh;
+	width: 100vw;
+	display: flex;
+}
+
 .game-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 30vw;
-  height: 100vh;
-  box-shadow: 1 5 4;
-  margin: auto;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	width: 30vw;
+	box-shadow: 1 5 4;
+	margin: auto;
+}
+
+.grid {
+	position: relative;
+}
+
+.game-wrapper:focus {
+	outline: 0px solid transparent;
+}
+
+.game-stats {
+	width: 100%;
+	display: flex;
+	justify-content: flex-end;
 }
