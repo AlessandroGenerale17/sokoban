@@ -126,6 +126,7 @@ export default function Game() {
 			.flat()
 			.filter((cell) => cell.cellType === 'box' && cell.target)
 	);
+
 	return (
 		<div className='container'>
 			<div

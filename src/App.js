@@ -1,8 +1,6 @@
-import { useEffect, useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Game from './pages/Game/';
 import Menu from './pages/Menu/';
-import ThemeSong from './assets/sounds/song.ogg';
 
 import './App.css';
 
@@ -18,7 +16,7 @@ function App() {
 					display: 'flex',
 					flexDirection: 'column',
 					alignItems: 'center',
-					marginTop: '3.5rem',
+					marginTop: '2.5rem',
 				}}
 			>
 				By Miguel Ferraris and Alessandro Generale

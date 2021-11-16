@@ -13,10 +13,17 @@
 	background-color: white;
 	height: 20vh;
 	margin: 0 50px;
-	border-radius: 0.5rem;
 }
 
 .overlay-commands {
 	display: flex;
 	justify-content: space-between;
+}
+
+.overlay-commands > button {
+	border: none;
+	border-radius: 0;
+	padding: 0.2rem;
+	margin: 0.2rem;
+	background-color: rgb(193, 215, 221);
 }
